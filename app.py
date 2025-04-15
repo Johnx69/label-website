@@ -35,7 +35,7 @@ def load_model_data(model_name):
         return []
 
 
-# Define default fields structure globally - reflects removal of future_repairment
+# Updated default fields structure with new fields for 3.1, 3.2, and 5.1.
 DEFAULT_FIELDS_STRUCTURE = {
     "identify_crack_type": "",
     "transverse": "",
@@ -44,6 +44,8 @@ DEFAULT_FIELDS_STRUCTURE = {
     "crack_pattern": "",
     "num_potholes": "",
     "pothole_pattern": "",
+    "estimated_pci": "",
+    "pci_category": "",
     "severity_assessment_text": "",
     "concentrated": "",
     "list_all_types": "",
@@ -51,7 +53,7 @@ DEFAULT_FIELDS_STRUCTURE = {
     "proof_worsen_defect": "",
     "proof_repairment": "",
     "list_evidence_repairment": "",
-    # "future_repairment": "", # Removed
+    "future_repairment": "",
 }
 
 
@@ -98,7 +100,7 @@ def load_verification_data(model_name):
                     else:
                         updated_entry_fields[key] = current_entry["fields"][key]
 
-                # Check if any old keys (like future_repairment) were present and removed
+                # Check if any old keys (like previous future_repairment) were present and removed
                 if set(current_entry["fields"].keys()) != set(
                     updated_entry_fields.keys()
                 ):
@@ -167,7 +169,7 @@ def save_verification():
 
     model_name = data.get("model_name")
     image_filename = data.get("image_filename")
-    fields = data.get("fields")  # Will no longer contain future_repairment
+    fields = data.get("fields")  # Will now contain the new fields as well.
     verified = data.get("verified", False)
 
     if not model_name or model_name not in ALLOWED_MODELS:
