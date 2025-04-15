@@ -1,0 +1,280 @@
+/* static/css/style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Use flexbox for overall layout */
+    flex-direction: column;
+    /* Stack header, container */
+    min-height: 100vh;
+    /* Ensure body takes full viewport height */
+}
+
+header {
+    background-color: #333;
+    padding: 10px 20px;
+    color: #fff;
+    flex-shrink: 0;
+    /* Prevent header from shrinking */
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav a {
+    color: #fff;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+.container {
+    display: flex;
+    /* Use flex for the main content area */
+    flex-grow: 1;
+    /* Allow container to grow and fill space */
+    padding: 20px;
+    overflow: hidden;
+    /* Prevent container overflow issues */
+}
+
+.verification-page {
+    display: flex;
+    /* Use flex for page layout (main content + sidebar) */
+    flex-direction: row;
+    /* Arrange children horizontally */
+    width: 100%;
+    /* Take full width of the container */
+    overflow: hidden;
+    /* Prevent overflow */
+}
+
+.main-content {
+    flex: 1;
+    /* Allow main content to take up available space */
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    /* Stack image and the content below it */
+    overflow: hidden;
+    /* Prevent overflow */
+}
+
+.display-panel {
+    width: 100%;
+    /* Make image container take full width of main-content */
+    text-align: center;
+    /* Center the image if it's smaller than the container */
+    margin-bottom: 20px;
+    /* Space below the image */
+    flex-shrink: 0;
+    /* Prevent image panel from shrinking */
+}
+
+.display-panel img {
+    max-width: 100%;
+    /* Max width relative to its container */
+    max-height: 45vh;
+    /* Adjust max height as needed */
+    object-fit: contain;
+    border: 1px solid #ccc;
+}
+
+/* New container for response and form */
+.content-below-image {
+    display: flex;
+    flex-direction: row;
+    /* Arrange response and form side-by-side */
+    flex-grow: 1;
+    /* Allow this container to fill remaining vertical space */
+    overflow: hidden;
+    /* Prevent overflow */
+}
+
+/* Column for model response */
+.response-column {
+    flex: 1;
+    /* Adjust flex ratio as needed (e.g., 1 for equal width) */
+    margin-right: 10px;
+    /* Space between response and form */
+    overflow-y: auto;
+    /* Allow scrolling if content overflows */
+    padding-right: 5px;
+    /* Padding for scrollbar */
+    border: 1px solid #eee;
+    /* Optional border */
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+/* Column for verification form */
+.form-column {
+    flex: 1;
+    /* Adjust flex ratio as needed (e.g., 1 for equal width) */
+    margin-left: 10px;
+    /* Space between response and form */
+    overflow-y: auto;
+    /* Allow scrolling if form is long */
+    padding-right: 5px;
+    /* Padding for scrollbar */
+    border: 1px solid #eee;
+    /* Optional border */
+    padding: 10px;
+}
+
+.response-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    padding: 10px;
+    background: #f0f0f0;
+    /* Slightly different background */
+    margin-top: 5px;
+    /* Space below "Model Response" heading */
+    font-family: monospace;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    /* Removed overflow-x: auto; rely on column scroll */
+    /* Removed max-height/height - let flexbox handle it */
+    font-size: 13px;
+    /* Slightly smaller font */
+    line-height: 1.4;
+}
+
+#model-response {
+    /* Redundant now, styles applied to .response-text */
+}
+
+form fieldset {
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    /* Added horizontal padding */
+    margin-bottom: 15px;
+}
+
+form legend {
+    font-weight: bold;
+    padding: 0 5px;
+    /* Add padding around legend text */
+}
+
+form label {
+    display: block;
+    margin: 8px 0 3px;
+    /* Increased top margin */
+    font-weight: 500;
+    /* Slightly bolder labels */
+    font-size: 0.9em;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+    width: calc(100% - 12px);
+    /* Adjust width to account for padding */
+    padding: 6px;
+    /* Slightly increased padding */
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    /* Added border */
+    border-radius: 3px;
+    /* Added border radius */
+}
+
+form input[type="checkbox"] {
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+.form-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    /* Space above buttons */
+}
+
+.form-controls button {
+    padding: 10px 20px;
+    /* Larger buttons */
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #888;
+}
+
+#save-btn {
+    background-color: #4CAF50;
+    /* Green */
+    color: white;
+    border-color: #4CAF50;
+}
+
+.sidebar {
+    width: 220px;
+    /* Slightly wider sidebar */
+    border-left: 1px solid #ccc;
+    padding-left: 15px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    /* Prevent sidebar from shrinking */
+    /* Removed max-height, let flexbox manage height relative to container */
+    max-height: 90vh;
+    /* Or set a max-height if needed, adjust based on header etc. */
+}
+
+.sidebar h3 {
+    margin-top: 0;
+    /* Remove default top margin */
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    /* Remove default margin */
+}
+
+.sidebar li {
+    cursor: pointer;
+    margin-bottom: 5px;
+    padding: 8px 5px;
+    /* Adjusted padding */
+    border: 1px solid #ddd;
+    font-size: 0.9em;
+    /* Slightly smaller font */
+    border-radius: 3px;
+    white-space: nowrap;
+    /* Prevent wrapping */
+    overflow: hidden;
+    /* Hide overflow */
+    text-overflow: ellipsis;
+    /* Show ellipsis if text overflows */
+    position: relative;
+    /* Needed for absolute positioning of tick */
+}
+
+.sidebar li:hover {
+    background-color: #eee;
+}
+
+.sidebar li.active {
+    background-color: #d8eaff;
+    /* Light blue */
+    font-weight: bold;
+}
+
+.sidebar .tick {
+    /* Use absolute positioning for better control */
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: green;
+    font-weight: bold;
+    display: none;
+}
+
+.sidebar .tick.verified {
+    display: inline;
+}
