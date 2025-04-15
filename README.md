@@ -34,13 +34,13 @@ Copy and paste the following commands into your terminal to set up the environme
 
 ```bash
 # Clone the repository
-git clone <repository_url>
+git clone https://github.com/Johnx69/label-website.git
 
 # Navigate to the repository directory
-cd <repository_directory_name>
+cd label-website
 
 # Create and activate conda environment
-conda create -n image-verification python=3.8 -y
+conda create -n image-verification python=3.10 -y
 conda activate image-verification
 
 # Install dependencies
