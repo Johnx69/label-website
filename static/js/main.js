@@ -2,20 +2,17 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Ensure records and verificationData are available globally or passed correctly
   if (typeof records === 'undefined' || typeof verificationData === 'undefined' || typeof modelName === 'undefined') {
-    console.error("Essential data (records, verificationData, modelName) is missing. Cannot initialize verification."); // Keep console error for debugging
-    // alert("Error: Page data is missing. Cannot initialize verification."); // Alert removed
-    return; // Stop execution if data is missing
+    console.error("Essential data (records, verificationData, modelName) is missing. Cannot initialize verification.");
+    return;
   }
 
-  let currentIndex = parseInt(document.getElementById('current-index').value) || 0; // Default to 0 if value is invalid
+  let currentIndex = parseInt(document.getElementById('current-index').value) || 0;
   const totalImages = records.length;
 
   if (totalImages === 0) {
       console.warn("No records found for this model.");
-      // Optionally disable controls or show a message
       return;
   }
-
 
   // Cache DOM elements
   const currentImageEl = document.getElementById('current-image');
@@ -31,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const listItem = imageListEl.querySelector(`li[data-img='${imageFilename}']`);
     if (listItem) {
         const tick = listItem.querySelector('.tick');
-         // Check if verification data exists and has the verified flag set to true
         if (tick && verificationData[imageFilename] && verificationData[imageFilename].verified === true) {
             tick.classList.add('verified');
         } else if (tick) {
@@ -53,38 +49,30 @@ document.addEventListener('DOMContentLoaded', function () {
   function loadCurrentImage() {
     if (currentIndex < 0 || currentIndex >= totalImages) {
         console.error(`Current index ${currentIndex} is out of bounds.`);
-        currentIndex = 0; // Reset to first image
+        currentIndex = 0;
     }
 
     const record = records[currentIndex];
     if (!record) {
         console.error(`No record found at index ${currentIndex}`);
-        return; // Exit if record is somehow undefined
+        return;
     }
     const imageFilename = record['Image'];
 
-    // Check if image element exists
-     if (!currentImageEl) {
+    if (!currentImageEl) {
          console.error("Image element 'current-image' not found.");
          return;
-     }
+    }
 
-    // Update image source (assumes images are in static/images relative to the app root)
-    // Ensure the path is correct depending on how static files are served.
     currentImageEl.src = `/static/images/${imageFilename}`;
-    currentImageEl.alt = `Image: ${imageFilename}`; // Update alt text
+    currentImageEl.alt = `Image: ${imageFilename}`;
 
-
-    // Check if model response element exists
-     if (!modelResponseEl) {
+    if (!modelResponseEl) {
          console.error("Model response element 'model-response' not found.");
          return;
-     }
-    // Update model response text
-    modelResponseEl.innerText = record['Response'] || "No response provided."; // Provide fallback text
+    }
+    modelResponseEl.innerText = record['Response'] || "No response provided.";
 
-
-    // Update the verification form with any existing data:
     const verifFields = (verificationData[imageFilename] && verificationData[imageFilename].fields) ? verificationData[imageFilename].fields : {};
 
     // Helper function to safely set form values
@@ -92,9 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const element = document.getElementById(id);
         if (element) {
             if (isCheckbox) {
-                element.checked = value || false; // Use boolean value, default to false
+                element.checked = value || false;
             } else {
-                element.value = value || ""; // Default to empty string for text/number/select
+                element.value = value || "";
             }
         } else {
             console.warn(`Form element with id '${id}' not found.`);
@@ -108,6 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
     setFieldValue('crack_pattern', verifFields.crack_pattern);
     setFieldValue('num_potholes', verifFields.num_potholes);
     setFieldValue('pothole_pattern', verifFields.pothole_pattern);
+    // New fields for Severity Assessment
+    setFieldValue('estimated_pci', verifFields.estimated_pci);
+    setFieldValue('pci_category', verifFields.pci_category);
     setFieldValue('severity_assessment_text', verifFields.severity_assessment_text);
     setFieldValue('concentrated', verifFields.concentrated);
     setFieldValue('list_all_types', verifFields.list_all_types);
@@ -115,24 +106,20 @@ document.addEventListener('DOMContentLoaded', function () {
     setFieldValue('proof_worsen_defect', verifFields.proof_worsen_defect);
     setFieldValue('proof_repairment', verifFields.proof_repairment);
     setFieldValue('list_evidence_repairment', verifFields.list_evidence_repairment);
-    // setFieldValue('future_repairment', verifFields.future_repairment); // Removed
+    // New field for Future Repairment
+    setFieldValue('future_repairment', verifFields.future_repairment);
 
-
-    // Update active class on sidebar
     if (imageListEl) {
         Array.from(imageListEl.children).forEach(li => li.classList.remove('active'));
         let activeItem = imageListEl.querySelector(`li[data-index='${currentIndex}']`);
         if (activeItem) {
             activeItem.classList.add('active');
-             // Scroll the active item into view if needed
             activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     } else {
         console.error("Image list element 'image-list' not found.");
     }
 
-
-    // Update hidden current index
     const currentIndexInput = document.getElementById('current-index');
     if (currentIndexInput) {
         currentIndexInput.value = currentIndex;
@@ -140,12 +127,10 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error("Hidden input 'current-index' not found.");
     }
 
-    // Enable/disable Prev/Next buttons
-     if(prevBtn) prevBtn.disabled = (currentIndex === 0);
-     if(nextBtn) nextBtn.disabled = (currentIndex === totalImages - 1);
+    if(prevBtn) prevBtn.disabled = (currentIndex === 0);
+    if(nextBtn) nextBtn.disabled = (currentIndex === totalImages - 1);
   }
 
-  // Event listeners for Next/Previous buttons
   if (prevBtn) {
       prevBtn.addEventListener('click', function () {
         if (currentIndex > 0) {
@@ -168,12 +153,10 @@ document.addEventListener('DOMContentLoaded', function () {
        console.error("Next button 'next-btn' not found.");
   }
 
-
-  // Click event on sidebar items
   if (imageListEl) {
       imageListEl.addEventListener('click', function (e) {
-        const li = e.target.closest('li'); // Get the li element even if click is on child (like the tick)
-        if (li && li.hasAttribute('data-index')) { // Ensure it's a valid list item
+        const li = e.target.closest('li');
+        if (li && li.hasAttribute('data-index')) {
           const newIndex = parseInt(li.getAttribute('data-index'));
            if (!isNaN(newIndex) && newIndex >= 0 && newIndex < totalImages) {
                currentIndex = newIndex;
@@ -186,7 +169,6 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
       console.error("Image list element 'image-list' not found for click listener.");
   }
-
 
   // Save verification data via AJAX
   if (saveBtn) {
@@ -203,12 +185,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const element = document.getElementById(id);
             if (!element) {
                 console.warn(`Form element with id '${id}' not found during save.`);
-                return isCheckbox ? false : ""; // Return default value
+                return isCheckbox ? false : "";
             }
             return isCheckbox ? element.checked : element.value;
         };
 
-        // Gather form data
+        // Gather form data including new fields
         let formData = {
           identify_crack_type: getFieldValue('identify_crack_type'),
           transverse: getFieldValue('transverse'),
@@ -217,6 +199,8 @@ document.addEventListener('DOMContentLoaded', function () {
           crack_pattern: getFieldValue('crack_pattern'),
           num_potholes: getFieldValue('num_potholes'),
           pothole_pattern: getFieldValue('pothole_pattern'),
+          estimated_pci: getFieldValue('estimated_pci'),
+          pci_category: getFieldValue('pci_category'),
           severity_assessment_text: getFieldValue('severity_assessment_text'),
           concentrated: getFieldValue('concentrated'),
           list_all_types: getFieldValue('list_all_types'),
@@ -224,18 +208,14 @@ document.addEventListener('DOMContentLoaded', function () {
           proof_worsen_defect: getFieldValue('proof_worsen_defect'),
           proof_repairment: getFieldValue('proof_repairment'),
           list_evidence_repairment: getFieldValue('list_evidence_repairment'),
-          // future_repairment: getFieldValue('future_repairment'), // Removed
+          future_repairment: getFieldValue('future_repairment'),
         };
 
-        // Determine verification status: Mark as verified if any field has a non-default value.
-        // (Adjust this logic if needed - e.g., require specific fields)
         let verified = Object.values(formData).some(val => {
-            // Check for non-empty strings or non-false booleans
             return val !== "" && val !== false && val !== null && typeof val !== 'undefined';
         });
 
-
-        console.log("Saving data:", { model_name: modelName, image_filename: imageFilename, fields: formData, verified: verified }); // Log data being sent
+        console.log("Saving data:", { model_name: modelName, image_filename: imageFilename, fields: formData, verified: verified });
 
         fetch('/save_verification', {
           method: 'POST',
@@ -243,59 +223,52 @@ document.addEventListener('DOMContentLoaded', function () {
             model_name: modelName,
             image_filename: imageFilename,
             fields: formData,
-            verified: verified // Send calculated verified status
+            verified: verified
           }),
           headers: {
             'Content-Type': 'application/json'
           }
         }).then(res => {
             if (!res.ok) {
-                // If response status is not 2xx, try to parse error message
                 return res.json().then(errData => {
                     throw new Error(errData.error || `HTTP error ${res.status}`);
                 }).catch(() => {
-                     // If parsing JSON fails, throw a generic error
                      throw new Error(`HTTP error ${res.status}`);
                 });
             }
-            return res.json(); // Parse JSON only if response is ok
+            return res.json();
         })
           .then(data => {
             if (data.success) {
-              // Update local verificationData IMMEDIATELY for responsiveness
               if (!verificationData[imageFilename]) {
-                  verificationData[imageFilename] = {}; // Ensure object exists
+                  verificationData[imageFilename] = {};
               }
               verificationData[imageFilename].fields = formData;
               verificationData[imageFilename].verified = verified;
 
-              updateTickForImage(imageFilename); // Update the tick in the sidebar
-              alert('Verification saved successfully!'); // Keep success alert
+              updateTickForImage(imageFilename);
+              alert('Verification saved successfully!');
             } else {
-              // Error message should be present from the backend response
               alert('Error saving verification: ' + (data.error || 'Unknown error'));
             }
           }).catch(err => {
             console.error("Save Error:", err);
             alert('Error saving verification: ' + err.message);
           });
-      }); // End saveBtn click listener
+      });
   } else {
         console.error("Save button 'save-btn' not found.");
   }
 
-
-  // Initialize with the first image (or current index if reloaded).
   if (totalImages > 0) {
       loadCurrentImage();
-      initializeSidebarTicks(); // Ensure ticks are correct on load
+      initializeSidebarTicks();
   } else {
-      // Handle the case of no images (e.g., show a message)
        const mainContent = document.querySelector('.main-content');
        if (mainContent) {
            mainContent.innerHTML = '<p>No images found for this model.</p>';
        }
-       if (imageListEl) imageListEl.innerHTML = ''; // Clear sidebar list
+       if (imageListEl) imageListEl.innerHTML = '';
   }
 
-}); // End DOMContentLoaded
+});
