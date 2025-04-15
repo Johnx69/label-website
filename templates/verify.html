@@ -1,0 +1,143 @@
+{% extends "base.html" %} {% block title %}Verify Model: {{
+model_name|capitalize }}{% endblock %} {% block content %}
+<div class="verification-page">
+  <div class="main-content">
+    <div class="display-panel">
+      <img
+        id="current-image"
+        src="{{ url_for('static', filename='images/' + records[0]['Image']) }}"
+        alt="Current Image"
+      />
+    </div>
+
+    <div class="content-below-image">
+      <div class="response-column">
+        <h3>Model Response</h3>
+        <div id="model-response" class="response-text">
+          {{ records[0]['Response']|safe }}
+        </div>
+      </div>
+
+      <div class="form-column">
+        <form id="verification-form">
+          <h3>Verification Criteria</h3>
+
+          <fieldset>
+            <legend>1.1 Crack Identification</legend>
+            <label for="identify_crack_type">a) Identify Crack Type</label>
+            <input
+              type="text"
+              id="identify_crack_type"
+              name="identify_crack_type"
+            />
+
+            <label for="transverse">b) # Transverse</label>
+            <input type="number" id="transverse" name="transverse" />
+
+            <label for="longitudinal">c) # of Longitude</label>
+            <input type="number" id="longitudinal" name="longitudinal" />
+
+            <label for="alligator">d) # of Alligator</label>
+            <input type="number" id="alligator" name="alligator" />
+          </fieldset>
+
+          <fieldset>
+            <legend>1.2 Crack Pattern</legend>
+            <label for="crack_pattern">Crack Pattern</label>
+            <input type="text" id="crack_pattern" name="crack_pattern" />
+          </fieldset>
+
+          <fieldset>
+            <legend>2. Pothole Identification</legend>
+            <label for="num_potholes">2.1 # of Potholes</label>
+            <input type="number" id="num_potholes" name="num_potholes" />
+
+            <label for="pothole_pattern">2.2 Pothole Pattern</label>
+            <input type="text" id="pothole_pattern" name="pothole_pattern" />
+          </fieldset>
+
+          <fieldset>
+            <legend>3. Severity Assessment</legend>
+            <label for="severity_assessment_text"
+              >Severity Assessment Notes / Description</label
+            >
+            <input
+              type="text"
+              id="severity_assessment_text"
+              name="severity_assessment_text"
+            />
+          </fieldset>
+
+          <fieldset>
+            <legend>4. Environmental and Surrounding Context</legend>
+            <label for="concentrated">4.1 Concentrated?</label>
+            <select id="concentrated" name="concentrated">
+              <option value="">--Select--</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+
+            <label for="list_all_types">4.2 List all Defect Types Seen</label>
+            <input type="text" id="list_all_types" name="list_all_types" />
+
+            <label for="near_utility_cut">4.3 Near Utility Cut?</label>
+            <select id="near_utility_cut" name="near_utility_cut">
+              <option value="">--Select--</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+
+            <label for="proof_worsen_defect">4.4 Proof of Worsen Defect?</label>
+            <select id="proof_worsen_defect" name="proof_worsen_defect">
+              <option value="">--Select--</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+
+            <label for="proof_repairment">4.5 a) Proof of Repairment?</label>
+            <select id="proof_repairment" name="proof_repairment">
+              <option value="">--Select--</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+
+            <label for="list_evidence_repairment"
+              >4.5 b) List Evidence of Repairment</label
+            >
+            <input
+              type="text"
+              id="list_evidence_repairment"
+              name="list_evidence_repairment"
+            />
+          </fieldset>
+
+          <div class="form-controls">
+            <button type="button" id="prev-btn">Previous</button>
+            <button type="button" id="next-btn">Next</button>
+            <button type="button" id="save-btn">Save</button>
+            <input type="hidden" id="current-index" value="0" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <aside class="sidebar">
+    <h3>Images</h3>
+    <ul id="image-list">
+      {% for rec in records %}
+      <li data-index="{{ loop.index0 }}" data-img="{{ rec['Image'] }}">
+        {{ rec['Image'] }}
+        <span class="tick" id="tick-{{ rec['Image'] }}">&#10003;</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </aside>
+</div>
+<script>
+  // Model data from the Excel file:
+  var records = {{ records | tojson }};
+  // Existing verification data:
+  var verificationData = {{ verif_data | tojson }};
+  var modelName = "{{ model_name }}";
+</script>
+{% endblock %}

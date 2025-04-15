@@ -1,0 +1,16 @@
+<!-- templates/index.html -->
+{% extends "base.html" %} {% block title %}Select Model{% endblock %} {% block
+content %}
+<div class="model-selection">
+  <h2>Select a Model for Verification</h2>
+  <ul>
+    {% for model in models %}
+    <li>
+      <a href="{{ url_for('verify', model_name=model) }}"
+        >{{ model|capitalize }}</a
+      >
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
