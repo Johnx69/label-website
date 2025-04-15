@@ -58,6 +58,12 @@ model_name|capitalize }}{% endblock %} {% block content %}
 
           <fieldset>
             <legend>3. Severity Assessment</legend>
+            <label for="estimated_pci">3.1 Estimated PCI</label>
+            <input type="text" id="estimated_pci" name="estimated_pci" />
+
+            <label for="pci_category">3.2 PCI Category</label>
+            <input type="text" id="pci_category" name="pci_category" />
+
             <label for="severity_assessment_text"
               >Severity Assessment Notes / Description</label
             >
@@ -111,6 +117,16 @@ model_name|capitalize }}{% endblock %} {% block content %}
             />
           </fieldset>
 
+          <fieldset>
+            <legend>5. Future Repairment</legend>
+            <label for="future_repairment">5.1 Future Repairment</label>
+            <input
+              type="text"
+              id="future_repairment"
+              name="future_repairment"
+            />
+          </fieldset>
+
           <div class="form-controls">
             <button type="button" id="prev-btn">Previous</button>
             <button type="button" id="next-btn">Next</button>
@@ -134,9 +150,7 @@ model_name|capitalize }}{% endblock %} {% block content %}
   </aside>
 </div>
 <script>
-  // Model data from the Excel file:
   var records = {{ records | tojson }};
-  // Existing verification data:
   var verificationData = {{ verif_data | tojson }};
   var modelName = "{{ model_name }}";
 </script>
